@@ -1,0 +1,13 @@
+---
+
+version: "3.8"
+services:
+  api:
+    build: .
+    image: api_spring-boot_java_hello-world:basic-role-based-access-control
+    env_file:
+      - .env
+    ports:
+      - 6060:6060
+
+...
