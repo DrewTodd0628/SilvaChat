@@ -14,8 +14,12 @@ public class ChatService {
     @Autowired
     ChatDB chatDB;
 
-    public List<Chat> getMessage() {
+    public List<Chat> getMessages() {
         return chatDB.findAll();
+    }
+
+    public Chat sendMessage(Chat chat) {
+        return chatDB.save(chat);
     }
     
 }
