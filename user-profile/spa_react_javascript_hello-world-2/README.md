@@ -23,6 +23,8 @@ npm i --save @fortawesome/free-brands-svg-icons
 ### 'cross-env' is not recognized as an internal or external command
 npm install --save-dev cross-env
 
+# Snapshot
+![snapshot](https://user-images.githubusercontent.com/74629827/191448660-9e13c373-346d-4413-ba8d-0713b021e7ee.jpg)
 
 Access application at
 http://localhost:4040/
