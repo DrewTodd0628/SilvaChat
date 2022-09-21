@@ -13,8 +13,14 @@ public class MessageService {
     return Message.from(text);
   }
 
+  public Message sendPublicMessage(String str) {
+    final var text = str;
+
+    return Message.from(text);
+  }
+
   public Message getProtectedMessage() {
-    final var text = "This is a protected message.";
+    final var text = "This is a protected message";
 
     return Message.from(text);
   }
