@@ -1,3 +1,4 @@
+
 # How to Run
 ## Start In One Terminal
 npm run api
@@ -42,3 +43,6 @@ Visit the ["React/JavaScript Code Sample: User Authentication For Basic Apps"](h
 ## Why Use Auth0?
 
 Auth0 is a flexible drop-in solution to add authentication and authorization services to your applications. Your team and organization can avoid the cost, time, and risk that come with building your own solution to authenticate and authorize users. We offer tons of guidance and SDKs for you to get started and [integrate Auth0 into your stack easily](https://auth0.com/developers/hub/code-samples/full-stack).
+
+### credit 
+<a href="https://www.freepik.com/free-vector/abstract-background-with-rainbow-coloured-hologram-background_19613969.htm#query=holographic&position=21&from_view=keyword">Image by kjpargeter</a> on Freepik
