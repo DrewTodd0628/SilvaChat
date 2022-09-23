@@ -6,7 +6,7 @@ const MessagesPageAuth = () => {
     const { user, isAuthenticated } = useAuth0();
     
     return (
-        isAuthenticated && (
+        true && (
             <MessagePage/>
         )
     )
