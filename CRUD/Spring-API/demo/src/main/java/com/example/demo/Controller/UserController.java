@@ -29,6 +29,11 @@ public class UserController {
         return userRepo.findAll();
     }
 
+    @GetMapping("/protected")
+    public List<User> GetProtectedUsers() {
+        return userRepo.findAll();
+    }
+
     @GetMapping("/{id}")
     public User GetUserByID(@PathVariable int id) {
         return userRepo.findById(id).orElse(null);
