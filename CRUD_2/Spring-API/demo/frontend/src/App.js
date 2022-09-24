@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes,Route} from "react-router-dom";
 
 import Home from "./components/Home";
 import AddUser from "./components/AddUser";
@@ -10,15 +10,15 @@ import Chat from "./components/Chat";
 function App(){
   return(
     <>
-    <Router>
+    <BrowserRouter>
     <Routes>
       <Route exact path="/" element ={<Home/>}/>
-      <Route path="/userList" element={<UserList/>}/>
+      {/* <Route path="/userList" element={<UserList/>}/>
       <Route path="/addUser" element={<AddUser/>}/>
-      <Route path="/editUser/:id" element={<UpdateUser/>}/>
-      <Route path="/chat" element={<Chat/>}/>
+      <Route path="/editUser/:id" element={<UpdateUser/>}/> */}
+      <Route exact path="/chat" element={<Chat/>}/>
     </Routes>
-    </Router>
+    </BrowserRouter>
     </>
   )
 }

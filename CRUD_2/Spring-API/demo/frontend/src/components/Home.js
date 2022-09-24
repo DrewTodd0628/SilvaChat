@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useEffect, useState} from "react";
 import {NavigationType, useNavigate} from "react-router-dom";
 import UserService from "../services/UserService";
 
@@ -9,18 +9,30 @@ const Home = () =>{
         timestamp: "",
     });
 
-    const navigaye = useNavigate();
+    const[data, setData] = React.useState(null);
+   
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const value = e.target.value;
         setUser({ ...user,[e.target.name]:value});
     }
-
+    useEffect(()=>{
+      sessionStorage.setItem("user",JSON.stringify(data));
+    },[data]);
     const saveUser = (e) => {
         e.preventDefault();
         UserService.saveUser(user).then((response) => {
-            console.log(response);
-            navigaye("/chat");
+            //set response from database to data
+            setData(response.data);
+            //put it in local storage
+            //localStorage.setItem('user', JSON.stringify(data));
+            //sessionStorage.setItem("user",data);
+              //setData(response.data);
+              //sessionStorage.setItem("user", data);
+            
+            //console.log(response);
+            navigate("/chat");
         })
         .catch((error) =>{
             console.log(error);
@@ -35,6 +47,7 @@ const Home = () =>{
             timestamp: "",
         });
     };
+
 
     return(
  
