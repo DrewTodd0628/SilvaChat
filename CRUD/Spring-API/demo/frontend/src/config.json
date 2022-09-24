@@ -1,0 +1,6 @@
+{
+    "domain": "dev-9mdmqlnu.us.auth0.com",
+    "clientId": "14Sgonw5LYShthxCCI9dQMfbnCYrqsKy",
+    "audience": "https://dev-9mdmqlnu.us.auth0.com/api/v2/",
+    "scope": "read:users"
+}

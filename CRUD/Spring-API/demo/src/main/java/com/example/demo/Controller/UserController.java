@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
 
 import com.example.demo.Entity.User;
 import com.example.demo.Repo.UserRepo;
 
-@RequestMapping("/api")
+@RequestMapping(path = "api/", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class UserController {
     
     @Autowired
