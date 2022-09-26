@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -22,6 +24,8 @@ public class Message{
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn( name = "user_id")
+    //solve infinite recursion problem use @JsonManagedReference and @JsonBackReference
+    @JsonBackReference
     private User user;
 
     public Message(){

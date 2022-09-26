@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 import java.util.List;
@@ -23,7 +25,8 @@ public class User {
     private String timestamp;
 
     @OneToMany(mappedBy = "user" , cascade = {CascadeType.ALL})
-
+    @JsonManagedReference
+    //solve infinite recursion problem use @JsonManagedReference and @JsonBackReference
     private List< Message> messages;
 
     public User(){

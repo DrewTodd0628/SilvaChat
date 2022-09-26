@@ -12,6 +12,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 //@RequestMapping("/api")
+@CrossOrigin(value = "http://localhost:3000")
+@RequestMapping("/api/v1/")
 @RestController
 //@CrossOrigin
 public class MessageController {
@@ -20,6 +22,7 @@ public class MessageController {
 
     @Autowired
     private MessageRepo messageRepo;
+
 
 
     @GetMapping("/user/{userId}/message")
@@ -33,7 +36,7 @@ public class MessageController {
         return userRepo.findById(userId).map(user ->{
             message.setUser(user);
             return messageRepo.save(message);
-        }).orElseThrow( ()-> new Exception("instructor not found"));
+        }).orElseThrow( ()-> new Exception("user not found"));
     }
 
     @PutMapping("/user/{userId}/message/{messageId}")
