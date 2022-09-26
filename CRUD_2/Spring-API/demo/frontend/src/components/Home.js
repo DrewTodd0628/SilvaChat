@@ -17,6 +17,8 @@ const Home = () =>{
         const value = e.target.value;
         setUser({ ...user,[e.target.name]:value});
     }
+
+    //everytime data is change sessionStorage will be set to data
     useEffect(()=>{
       sessionStorage.setItem("user",JSON.stringify(data));
     },[data]);
