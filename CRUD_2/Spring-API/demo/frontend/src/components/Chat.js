@@ -7,7 +7,7 @@ const Chat = () => {
     const[data, setData] = React.useState(null);
     const[newMessage, setNewMessage] =React.useState([]);
     const[messageData,setMessageData]= React.useState([]);
-
+    const[messageList, setMessageList] = React.useState([]);
     const [user , setUser] = useState({
         id: "",
         name: "",
@@ -63,14 +63,16 @@ const Chat = () => {
         // setMessageData(newMessages);
 
         MessageService.getMessages().then(response=>{
+            setMessageList([...response.data]);
+            setMessageData(messageList);
             console.log("response");
             console.log(response.data);
-            const newMessages=[...messageData];
-             newMessages.push(msg);
-             setMessageData(newMessages);
+            //const newMessages=[...messageData];
+             //newMessages.push(msg);
+             //setMessageData(newMessages);
         })
         
-    },[msg]);
+    },[messageData]);
     useEffect(() => {
         console.log(msg);
 
@@ -81,25 +83,32 @@ const Chat = () => {
             <h1> Chat  </h1>
             <div className = "chat">
                 <div className ="chat-message">
-                    {messageData.map((i)=>{
-                        if(i.name == user.name){
-                            return(
-                                <div className ="msg">
-                                    <p>{i.message}</p>
-                                    <span>{i.name}</span>
-                                </div>
-                            );
-                        } else{
-                            return (
-                                <div className ="msg msg-right">
-                                    <p>{i.message}</p>
-                                    <span>{i.name}</span>
-                                </div>
-                            );
-                        }
-                    
-                    })}
+                    {messageData.map((i)=>
+                        <div key ={i.id}>
+                            <p>{i.message}</p>
+                            <span>{i.name}</span>
+                        </div>
+                    )}                
                 </div>
+                        {/* if(i.name === user.name){ */}
+                        {/* //     return(
+                        //         <div className ="msg">
+                        //             <p>{i.message}</p>
+                        //             <span>{i.name}</span>
+                        //         </div>
+                        
+                    //         );
+                    //     } else{ */}
+                    {/* //         return (
+                    //             <div className ="msg msg-right">
+                    //                 <p>{i.message}</p>
+                    //                 <span>{i.name}</span>
+                    //             </div>
+                    //         );
+                    //     }
+                    
+                    // })}
+                 */}
                 <div className="enter-message">
                     <input 
                     type = "text" 
