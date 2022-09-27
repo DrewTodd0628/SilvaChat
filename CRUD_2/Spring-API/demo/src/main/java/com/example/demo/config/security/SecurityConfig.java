@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final ApplicationProperties applicationProps;
 
+  // Set what endpoints to secure
   @Override
   public void configure(final WebSecurity web) throws Exception {
     final var exclusionRegex = "^(?!%s|%s).*$".formatted(
