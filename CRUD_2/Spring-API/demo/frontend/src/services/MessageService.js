@@ -8,17 +8,22 @@ class MessageService{
         return axios.post(MESSAGE_API_BASE_URL + "/" + userId + "/message", message);
     }
 
-   /// getMessagesByUserId(userId){
-       // return axios.get(MESSAGE_API_BASE_URL + "/" + userId + "/" + message );
+    getMessagesByUserId(userId){
+        return axios.get(MESSAGE_API_BASE_URL + "/" + userId + "/message" );
+    }
+    getMessages(){
+        return axios.get(MESSAGE_API_BASE_URL+"/messages");
+    }
+   // getMessageById(userId, id){
+   //     return axios.get(MESSAGE_API_BASE_URL+"/"+userId+"/message/"+id, message);
+   // }
 
-  //  }
+    deleteUser(userId, id){
+        return axios.delete(MESSAGE_API_BASE_URL + "/" + userId + "/message/" + id);
+    }
 
-  //  deleteUser(userId, id){
-  //      return axios.delete(MESSAGE_API_BASE_URL + "/" + userId + "/" + message + "/" + id);
-  //  }
-
-  //  updateMessage(userId, id){
-  //      return axios.put(MESSAGE_API_BASE_URL + "/" + userId + "/" + message + "/" + id, message);
+ //   updateMessage(userId, id){
+ //       return axios.put(MESSAGE_API_BASE_URL + "/" + userId + "/message/" + id, message);
   //  }
 }
 

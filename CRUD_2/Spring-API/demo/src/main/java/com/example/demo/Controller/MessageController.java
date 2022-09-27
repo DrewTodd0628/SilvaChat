@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 
 import com.example.demo.Entity.Message;
+import com.example.demo.Entity.User;
 import com.example.demo.Repo.MessageRepo;
 import com.example.demo.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,28 @@ public class MessageController {
     @Autowired
     private MessageRepo messageRepo;
 
-
+    @GetMapping("/user/messages")
+    public List<Message> getMessages(){
+        return messageRepo.findAll();
+    }
 
     @GetMapping("/user/{userId}/message")
     public List<Message> GetMessagesByUser(@PathVariable(value="userId") int userId) {
         return messageRepo.findByUserId(userId);
     }
+
+    @GetMapping("/user/{userId}/message/{messageId}")
+    public Message getMessageById(@PathVariable(value="userId")int userId,
+                                  @PathVariable(value ="messageId")int messageId) throws Exception{
+        if( !userRepo.existsById(userId)){
+            throw new Exception("userId not found");
+        }
+        return messageRepo.findById(messageId).map(message -> {
+            message.getMessage();
+            return message;
+        }).orElseThrow( ()-> new Exception("messageId is not found"));
+    }
+
 
     @PostMapping("/user/{userId}/message")
     public Message createMessage(@PathVariable(value="userId") int userId,

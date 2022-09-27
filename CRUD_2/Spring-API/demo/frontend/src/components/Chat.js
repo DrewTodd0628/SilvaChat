@@ -5,7 +5,9 @@ import MessageService from "../services/MessageService";
 const Chat = () => {
 
     const[data, setData] = React.useState(null);
-    const[messageData,setMessageData]= React.useState(null);
+    const[newMessage, setNewMessage] =React.useState([]);
+    const[messageData,setMessageData]= React.useState([]);
+
     const [user , setUser] = useState({
         id: "",
         name: "",
@@ -16,13 +18,19 @@ const Chat = () => {
         message: "",
         user_id: "",
     })
-   // {"id":1,"name":"k","timestamp":"m","messages":null}
-    //get sessionStorage user and set to data
+    const [msg, setMsg] = useState({
+        id: "",
+        name: "",
+        user_id:"",
+        message: "",
+    })
     useEffect( () => {
         var object =sessionStorage.getItem("user");
         setData(object);
         changeUserToValue();
     }, []);
+
+    
     const changeUserToValue = ()=>{
         const object =sessionStorage.getItem("user");
         const array = object.split(",");
@@ -36,35 +44,62 @@ const Chat = () => {
     }
     const handleMessage = (e)=>{
         const {value} = e.target;
-        //setMessage({mess: value});
         setMessage({...message,[e.target.name]:value})
         console.log(message.message);
     }
     const sendMessage = (e)=>{
         e.preventDefault();
-        MessageService.saveMessage(user.id,message).then((response) => {
-            //set response from database to data
-            setMessageData(response.data);
-            
+        MessageService.saveMessage(user.id,message).then(response => {
+            setMsg({id:response.data.id,name:user.name,user_id: message.user_id,message: response.data.message});
+            console.log("response.data");
+            console.log(response.data);
         })
-        .catch((error) =>{
-            console.log(error);
-        });
-    }
-   // const [mainChat, setMainChat] = useState([]);
-    //const [username, setUserName] = useState("CHATROOM");
+        
+
+    };
+    useEffect(() =>{
+        // const newMessages=[...messageData];
+        // newMessages.push(msg);
+        // setMessageData(newMessages);
+
+        MessageService.getMessages().then(response=>{
+            console.log("response");
+            console.log(response.data);
+            const newMessages=[...messageData];
+             newMessages.push(msg);
+             setMessageData(newMessages);
+        })
+        
+    },[msg]);
+    useEffect(() => {
+        console.log(msg);
+
+    },[messageData])
+
     return (
         <div>
-            <h1>Session storage is</h1>
-            {data}
-            <h2>user data is now</h2>
-            {user.id}<br></br> {user.name}<br></br> {user.timestamp}
-            <h3>message user_id is now</h3>
-            {message.user_id}
+            <h1> Chat  </h1>
             <div className = "chat">
-                <ul className="main-chat">
+                <div className ="chat-message">
+                    {messageData.map((i)=>{
+                        if(i.name == user.name){
+                            return(
+                                <div className ="msg">
+                                    <p>{i.message}</p>
+                                    <span>{i.name}</span>
+                                </div>
+                            );
+                        } else{
+                            return (
+                                <div className ="msg msg-right">
+                                    <p>{i.message}</p>
+                                    <span>{i.name}</span>
+                                </div>
+                            );
+                        }
                     
-                </ul>
+                    })}
+                </div>
                 <div className="enter-message">
                     <input 
                     type = "text" 
