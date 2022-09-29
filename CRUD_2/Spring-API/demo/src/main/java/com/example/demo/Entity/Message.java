@@ -3,27 +3,26 @@ package com.example.demo.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="message")
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
-public class Message{
+public class Message implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    //@Column()
-    //private int chatID;
-
     @Column(name = "message")
     private String message;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn( name = "user_id")
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn( name = "user_id", referencedColumnName = "id")
     //solve infinite recursion problem use @JsonManagedReference and @JsonBackReference
     @JsonBackReference
     private User user;

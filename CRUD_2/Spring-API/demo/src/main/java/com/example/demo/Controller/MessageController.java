@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class MessageController {
 
     @GetMapping("/user/messages")
     public List<Message> getMessages(){
+
         return messageRepo.findAll();
     }
 
@@ -78,4 +82,7 @@ public class MessageController {
         }).orElseThrow( () -> new Exception(
                 "Message not found with id "+messageId+" and userId "+userId));
     }
+
+    //explicit inner join with single-value association
+
 }

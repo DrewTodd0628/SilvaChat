@@ -14,9 +14,9 @@ class MessageService{
     getMessages(){
         return axios.get(MESSAGE_API_BASE_URL+"/messages");
     }
-   // getMessageById(userId, id){
-   //     return axios.get(MESSAGE_API_BASE_URL+"/"+userId+"/message/"+id, message);
-   // }
+//    getMessageById(userId, id){
+//        return axios.get(MESSAGE_API_BASE_URL+"/"+userId+"/message/"+id, message);
+//    }
 
     deleteUser(userId, id){
         return axios.delete(MESSAGE_API_BASE_URL + "/" + userId + "/message/" + id);

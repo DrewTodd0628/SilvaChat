@@ -4,15 +4,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "user")
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
+
 //took out extends AuditModel
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
@@ -24,7 +23,10 @@ public class User {
     @Column(name="timestamp")
     private String timestamp;
 
-    @OneToMany(mappedBy = "user" , cascade = {CascadeType.ALL})
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "user"
+    )
     @JsonManagedReference
     //solve infinite recursion problem use @JsonManagedReference and @JsonBackReference
     private List< Message> messages;
@@ -68,4 +70,5 @@ public class User {
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
+
 }

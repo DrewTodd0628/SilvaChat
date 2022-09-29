@@ -6,6 +6,9 @@ class UserService{
     saveUser(user){
         return axios.post(USER_API_BASE_URL, user);
     }
+    getData(){
+        return axios.get(USER_API_BASE_URL+"messages");
+    }
 
     getUserByName(name){
         return axios.get(USER_API_BASE_URL + "/" + name);

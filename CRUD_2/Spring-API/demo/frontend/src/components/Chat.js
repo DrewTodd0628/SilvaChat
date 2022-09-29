@@ -1,13 +1,13 @@
 import React, { useEffect, useState} from "react";
 //import {NavigationType, useNavigate} from "react-router-dom";
-//import UserService from "../services/UserService";
+import UserService from "../services/UserService";
 import MessageService from "../services/MessageService";
+import './style/chatStyle.css';
 const Chat = () => {
 
     const[data, setData] = React.useState(null);
-    const[newMessage, setNewMessage] =React.useState([]);
     const[messageData,setMessageData]= React.useState([]);
-    const[messageList, setMessageList] = React.useState([]);
+    const[displayList, setDisplayList] = React.useState([]);
     const [user , setUser] = useState({
         id: "",
         name: "",
@@ -24,13 +24,13 @@ const Chat = () => {
         user_id:"",
         message: "",
     })
+
     useEffect( () => {
         var object =sessionStorage.getItem("user");
         setData(object);
         changeUserToValue();
     }, []);
 
-    
     const changeUserToValue = ()=>{
         const object =sessionStorage.getItem("user");
         const array = object.split(",");
@@ -53,62 +53,55 @@ const Chat = () => {
             setMsg({id:response.data.id,name:user.name,user_id: message.user_id,message: response.data.message});
             console.log("response.data");
             console.log(response.data);
+            
         })
-        
 
     };
-    useEffect(() =>{
-        // const newMessages=[...messageData];
-        // newMessages.push(msg);
-        // setMessageData(newMessages);
+     useEffect(() =>{
+        UserService.getData().then(response=>{
 
-        MessageService.getMessages().then(response=>{
-            setMessageList([...response.data]);
-            setMessageData(messageList);
-            console.log("response");
-            console.log(response.data);
-            //const newMessages=[...messageData];
-             //newMessages.push(msg);
-             //setMessageData(newMessages);
+            const text = response.data;
+            //give the text props as it response.data doesn't have column headers
+            for(let i=0; i<text.length; i++){
+                //user_name, message, id
+                text[i][0]=""+text[i][0];
+                text[i][1]=""+text[i][1];
+                text[i][2]=""+text[i][2];
+            }
+
+            setDisplayList([...text]);
+            setMessageData(displayList);
+            console.log(messageData);
         })
-        
     },[messageData]);
-    useEffect(() => {
-        console.log(msg);
 
-    },[messageData])
+  
+
+    let renderMessage = (i) =>{
+        const messageFromMe = i[0]=== user.name;
+        const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
+        return(
+            <li key={i[2]} className={className}>
+                    <span className = "Message-content">
+                        <div className="username">
+                            {i[0]}
+                        </div>
+                        <div className="text">
+                            {i[1]}
+                        </div>
+                    </span>
+                    <br/>
+            </li>
+        )      
+    }
 
     return (
         <div>
             <h1> Chat  </h1>
             <div className = "chat">
-                <div className ="chat-message">
-                    {messageData.map((i)=>
-                        <div key ={i.id}>
-                            <p>{i.message}</p>
-                            <span>{i.name}</span>
-                        </div>
-                    )}                
-                </div>
-                        {/* if(i.name === user.name){ */}
-                        {/* //     return(
-                        //         <div className ="msg">
-                        //             <p>{i.message}</p>
-                        //             <span>{i.name}</span>
-                        //         </div>
-                        
-                    //         );
-                    //     } else{ */}
-                    {/* //         return (
-                    //             <div className ="msg msg-right">
-                    //                 <p>{i.message}</p>
-                    //                 <span>{i.name}</span>
-                    //             </div>
-                    //         );
-                    //     }
-                    
-                    // })}
-                 */}
+                <div className ="messages-list">
+                    {messageData.map((i)=> renderMessage(i))}
+                </div>        
                 <div className="enter-message">
                     <input 
                     type = "text" 
@@ -117,6 +110,11 @@ const Chat = () => {
                     value ={message.message} 
                     onChange={(e)=>handleMessage(e)}
                     className="entered-message" 
+                    onKeyPress={event => {
+                        if(event.key === 'Enter'){
+                            sendMessage(message.message);
+                        }
+                    }}
                     />
                     <button type="button" 
                     className="send-button" 

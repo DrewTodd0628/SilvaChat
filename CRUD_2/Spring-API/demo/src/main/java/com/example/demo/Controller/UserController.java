@@ -4,21 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.Repo.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.Entity.User;
 import com.example.demo.Repo.UserRepo;
 
+import javax.management.Query;
 import javax.validation.Valid;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -28,6 +23,8 @@ public class UserController {
     
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private MessageRepo messageRepo;
 
     @GetMapping("/user/{name}")
     public int getUserByName( @PathVariable(value="name") String name){
@@ -38,6 +35,14 @@ public class UserController {
     @GetMapping("/user")
     public List<User> GetUsers() {
         return userRepo.findAll();
+    }
+    @GetMapping("/usermessages")
+    public  List<Object[]> getData(){
+        //List<Object[]> resultList = userRepo .queryBy();
+        List<Object[]> resultList = userRepo.queryBy();
+        resultList.forEach(System.out::println);
+        return resultList;
+
     }
 
     @GetMapping("/user/{id}")

@@ -1,14 +1,14 @@
 ---
 
 application:
-  audience: ${env.AUTH0_AUDIENCE:}
-  client-origin-url: ${env.CLIENT_ORIGIN_URL:}
+  audience: https://dev-9mdmqlnu.us.auth0.com/api/v2/
+  client-origin-url: http://localhost:3000
 
 server:
   error:
     whitelabel:
       enabled: false
-  port: ${env.PORT:0}
+  port: 8080
 
 spring:
   mvc:
@@ -17,7 +17,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://${env.AUTH0_DOMAIN}/
+          issuer-uri: https://dev-9mdmqlnu.us.auth0.com/
   web:
     resources:
       add-mappings: false
