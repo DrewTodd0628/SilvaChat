@@ -12,9 +12,6 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<User, Integer>{
     User findByName(String name);
 
-//    @Query( value = "SELECT u.user_name, m.message, m.id " +
-//            "FROM user u, message m" +
-//            "WHERE u.id = m.user_id", nativeQuery = true)
     @Query(value = "SELECT u.name, m.message, m.id FROM User u, Message m WHERE u.id = m.user.id Order By m.id")
     List<Object[]> queryBy();
 

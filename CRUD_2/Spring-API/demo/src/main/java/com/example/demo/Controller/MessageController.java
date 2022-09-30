@@ -83,6 +83,5 @@ public class MessageController {
                 "Message not found with id "+messageId+" and userId "+userId));
     }
 
-    //explicit inner join with single-value association
 
 }
