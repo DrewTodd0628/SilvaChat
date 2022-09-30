@@ -24,7 +24,10 @@ const Chat = () => {
         user_id:"",
         message: "",
     })
-
+    const [deleteMsg, setDeleteMsg] = useState({
+        id: "",
+        user_id: "",
+    });
     useEffect( () => {
         var object =sessionStorage.getItem("user");
         setData(object);
@@ -67,6 +70,7 @@ const Chat = () => {
                 text[i][0]=""+text[i][0];
                 text[i][1]=""+text[i][1];
                 text[i][2]=""+text[i][2];
+                text[i][3]=""+text[i][3];
             }
 
             setDisplayList([...text]);
@@ -74,11 +78,15 @@ const Chat = () => {
             console.log(messageData);
         })
     },[messageData]);
-
-  
+    const handleRemove=(id,user_id)=>{
+        MessageService.deleteMessage(id, user_id).then(response =>{
+            console.log("we've deleted this");
+            console.log(response.data);
+        })
+    }
 
     let renderMessage = (i) =>{
-        const messageFromMe = i[0]=== user.name;
+        const messageFromMe = i[3]=== user.id;
         const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
         return(
             <li key={i[2]} className={className}>
@@ -88,6 +96,14 @@ const Chat = () => {
                         </div>
                         <div className="text">
                             {i[1]}
+                        </div>
+                        <div>
+                            <button type="button" 
+                            className="button"
+                            onClick={()=>handleRemove(i[3],i[2])}
+                            >
+                                Delete
+                            </button>
                         </div>
                     </span>
                     <br/>

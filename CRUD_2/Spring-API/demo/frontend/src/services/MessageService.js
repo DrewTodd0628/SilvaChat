@@ -18,8 +18,8 @@ class MessageService{
 //        return axios.get(MESSAGE_API_BASE_URL+"/"+userId+"/message/"+id, message);
 //    }
 
-    deleteUser(userId, id){
-        return axios.delete(MESSAGE_API_BASE_URL + "/" + userId + "/message/" + id);
+    deleteMessage(user_id, id){
+        return axios.delete(MESSAGE_API_BASE_URL + "/" + user_id + "/message/" + id);
     }
 
  //   updateMessage(userId, id){

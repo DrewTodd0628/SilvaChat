@@ -73,14 +73,14 @@ public class MessageController {
         }).orElseThrow( () -> new Exception("message id not found"));
     }
 
-    @DeleteMapping("/user/{userId}/message/{messageId}")
-    public ResponseEntity< ? > deleteCourse (@PathVariable(value="userId") int userId,
-                                            @PathVariable(value="messageId")int messageId )throws Exception{
-        return messageRepo.findByIdAndUserId(messageId, userId).map(message -> {
+    @DeleteMapping("/user/{user_id}/message/{id}")
+    public ResponseEntity< ? > deleteCourse (@PathVariable(value="user_id") int user_id,
+                                            @PathVariable(value="id")int id )throws Exception{
+        return messageRepo.findByIdAndUserId(id, user_id).map(message -> {
             messageRepo.delete(message);
             return ResponseEntity.ok().build();
         }).orElseThrow( () -> new Exception(
-                "Message not found with id "+messageId+" and userId "+userId));
+                "Message not found with id "+id+" and userId "+user_id));
     }
 
 

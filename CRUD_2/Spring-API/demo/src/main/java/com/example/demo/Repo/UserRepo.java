@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<User, Integer>{
     User findByName(String name);
 
-    @Query(value = "SELECT u.name, m.message, m.id FROM User u, Message m WHERE u.id = m.user.id Order By m.id")
+    @Query(value = "SELECT u.name, m.message, m.id, u.id FROM User u, Message m WHERE u.id = m.user.id Order By m.id")
     List<Object[]> queryBy();
 
 
