@@ -18,9 +18,9 @@ const Home = () =>{
         setUser({ ...user,[e.target.name]:value});
     }
 
-    //everytime data is change sessionStorage will be set to data
+    //everytime data is change localStorage will be set to data
     useEffect(()=>{
-      sessionStorage.setItem("user",JSON.stringify(data));
+      localStorage.setItem("user",JSON.stringify(data));
     },[data]);
     const saveUser = (e) => {
         e.preventDefault();
@@ -29,9 +29,9 @@ const Home = () =>{
             setData(response.data);
             //put it in local storage
             //localStorage.setItem('user', JSON.stringify(data));
-            //sessionStorage.setItem("user",data);
+            //localStorage.setItem("user",data);
               //setData(response.data);
-              //sessionStorage.setItem("user", data);
+              //localStorage.setItem("user", data);
             
             //console.log(response);
             navigate("/chat");
@@ -56,11 +56,11 @@ const Home = () =>{
         <div className="flex max-w-2xl mx-auto shadow border-b">
         <div className="px-8 py-8">
           <div className="font-thin text-2xl tracking-wider">
-            <h1>Add New User</h1>
+            <h1>Set Username</h1>
           </div>
           <div className="items-center justify-center h-14 w-full my-4">
             <label className="block text-gray-600 text-sm font-normal">
-              First Name
+              username
             </label>
             <input
               type="text"

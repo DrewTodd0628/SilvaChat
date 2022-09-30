@@ -29,13 +29,13 @@ const Chat = () => {
         user_id: "",
     });
     useEffect( () => {
-        var object =sessionStorage.getItem("user");
+        var object =localStorage.getItem("user");
         setData(object);
         changeUserToValue();
     }, []);
 
     const changeUserToValue = ()=>{
-        const object =sessionStorage.getItem("user");
+        const object =localStorage.getItem("user");
         const array = object.split(",");
 
         const a0 = array[0].split(":");

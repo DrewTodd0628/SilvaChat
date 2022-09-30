@@ -7,174 +7,156 @@ import UserList from "./components/UserList";
 import UpdateUser from "./components/UpdateUser";
 import Chat from "./components/Chat";
 
-function App(){
-  return(
-    <>
-    <BrowserRouter>
-    <Routes>
-      <Route exact path="/" element ={<Home/>}/>
-      {/* <Route path="/userList" element={<UserList/>}/>
-      <Route path="/addUser" element={<AddUser/>}/>
-      <Route path="/editUser/:id" element={<UpdateUser/>}/> */}
-      <Route exact path="/chat" element={<Chat/>}/>
-    </Routes>
-    </BrowserRouter>
-    </>
-  )
+import { useState, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import configData from "./config.json";
+import LoginButton from "./components/auth/LoginButton";
+import LogoutButton from "./components/auth/LogoutButton";
+import MessagePageAuth from "./components/auth/MessagePageAuth";
+import {IsNew} from "./components/NewUser";
+import Routing from './components/Routing';
+import './components/style/App.css';
+import axios from 'axios';
+
+// Known issues:
+// Page constantly reloaded. Cause: Checks of logging in before browser gets a chance to finish processing request.
+// Can't access data from API regardless of authentication status.
+
+function App() {
+  const {
+    isLoading,
+    error,
+    isAuthenticated,
+    user,
+    getAccessTokenSilently,
+    loginWithRedirect,
+    logout,
+  } = useAuth0();
+
+  console.log("did you login?: " + isAuthenticated);
+
+  const [accessToken, setAccessToken] = useState(null);
+  const [apiResponseMessage, setAPIResponseMessage] = useState('');
+
+  useEffect(() => {
+    setAPIResponseMessage('');
+    const getAccessToken = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: configData.audience,
+          scope: configData.scope,
+        });
+        setAccessToken(accessToken);
+      } catch (e) {
+        console.log(e.message);
+      }
+    };
+
+    getAccessToken();
+  }, [getAccessTokenSilently, setAPIResponseMessage]);
+
+
+
+  // if (error) {
+  //   return <div>Oops... {error.message}</div>;
+  // }
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (!isAuthenticated) {
+  //   console.log("Logged out");
+  //   return loginWithRedirect();
+  // }
+
+  const securedAPITest = () => {
+    fetch("http://localhost:8080/auth0/private", {
+      method: "GET",
+      headers: new Headers({
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json",
+      }),
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (resJson) {
+        console.log(resJson)
+        setAPIResponseMessage(resJson.message);
+      })
+      .catch((e) => console.log(e));
+  };
+
+
+
+
+
+
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        {/* <p>Hi {user.email}, You have successfully logged in.</p> */}
+        <LoginButton/>
+       <LogoutButton/>
+      </header>
+
+
+      <div className="page">
+       {/* <NewUser/> */}
+       <Routing/>
+       {IsNew()}
+      </div>
+    </div>
+  );
 }
 
 export default App;
 
+// function App(){
+//   return(
+//     <>
+//     <BrowserRouter>
+//     <Routes>
+//       <Route exact path="/" element ={<Home/>}/>
+//       {/* <Route path="/userList" element={<UserList/>}/>
+//       <Route path="/addUser" element={<AddUser/>}/>
+//       <Route path="/editUser/:id" element={<UpdateUser/>}/> */}
+//       <Route exact path="/chat" element={<Chat/>}/>
+//     </Routes>
+//     </BrowserRouter>
+//     </>
+//   )
+// }
+
+// export default App;
+
+
+
 // import React from 'react';
-// import axios from "axios";
+// import {BrowserRouter, Routes,Route} from "react-router-dom";
 
-// class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state ={
-//       users:[],
-//       id:0,
-//       name:'',
-//       message:'',
-//       timpstamp:''
-//     }
-//   }
-//   // Did page refresh
-//   componentDidMount(){
+// import Home from "./components/Home";
+// import AddUser from "./components/AddUser";
+// import UserList from "./components/UserList";
+// import UpdateUser from "./components/UpdateUser";
+// import Chat from "./components/Chat";
 
-//     // Fetch from database
-//     axios.get("http://localhost:8080/api/")
-//     .then((res)=>{
-//       this.setState({
-//         users:res.data,
-//         id:0,
-//         name:'',
-//         message:'',
-//         timpstamp:''
-//       })
-//     })
-//   }
-
-//   // Send data to database
-//   submit(event, id){
-//     event.preventDefault();
-//     if(id === 0){
-//       axios.post("http://localhost:8080/api/user",{
-//         name:this.state.name,
-//         message:this.state.message,
-//         timestamp:this.state.timestamp
-//       })
-//       .then((res)=>{
-//         // Reload page after sending
-//         this.componentDidMount();
-//       })
-//     } else(
-//       axios.put("http://localhost:8080/api/user", {
-//         id:this.state.id,
-//         name:this.state.name,
-//         message:this.state.message,
-//         timestamp:this.state.timestamp
-//       })
-//       .then(()=>{
-//         this.componentDidMount();
-//       })
-//     )
-//   }
-
-//   delete(id){
-//     axios.delete(`http://localhost:8080/api/user/${id}`)
-//     .then(()=>{
-//       this.componentDidMount();
-//     })
-//   }
-
-//   edit(id){
-//     axios.get(`http://localhost:8080/api/user/${id}`)
-//     .then((res)=>{
-//       console.log(res.data);
-//       this.setState({
-//         id:res.data.id,
-//         name:res.data.name,
-//         message:res.data.message,
-//         timestamp:res.data.timestamp
-//       })
-//     })
-//   }
-
-//   render() {
-//     return (
-//       <div className="container">
-
-
-//         <div className="row">
-//         <div className="col s6">
-//           <form onSubmit={(e)=>this.submit(e, this.state.id)}>
-
-
-//             <div className="input-field col s12">
-//               <i className="material-icons prefix">person</i>
-//               <input onChange={(e)=>this.setState({name:e.target.value})} value={this.state.name} type="text" id="autocomplete-input" class="autocomplete"/>
-//               <label for="autocomplete-input">Name</label>
-//             </div>
-//             <div className="input-field col s12">
-//               <i className="material-icons prefix">message</i>
-//               <input onChange={(e)=>this.setState({message:e.target.value})} value={this.state.message} type="text" id="autocomplete-input" class="autocomplete"/>
-//               <label for="autocomplete-input">Message</label>
-//             </div>
-//             <div className="input-field col s12">
-//               <i className="material-icons prefix">vpn_key</i>
-//               <input onChange={(e)=>this.setState({timestamp:e.target.value})} value={this.state.timestamp} type="text" id="autocomplete-input" class="autocomplete"/>
-//               <label for="autocomplete-input">Time Sent</label>
-//             </div>
-
-
-//             <button class="btn waves-effect waves-light right" type="submit" name="action">Submit
-//               <i class="material-icons right">send</i>
-//             </button>
-
-
-//           </form>
-//         </div>
-//         <div className="col s6">
-//         <table>
-//         <thead>
-//           <tr>
-//               <th>Name</th>
-//               <th>Message</th>
-//               <th>Time Sent</th>
-//               <th>Edit</th>
-//               <th>Delete</th>
-//           </tr>
-//         </thead>
-
-//         <tbody>
-//           {
-//             this.state.users.map(user=>
-//                 <tr key={user.id}>
-//                   <td>{user.name}</td>
-//                   <td>{user.message}</td>
-//                   <td>{user.timestamp}</td>
-//                   <td>
-//                     <button onClick={(e)=>this.edit(user.id)} class="btn waves-effect waves-light right" type="submit" name="action">
-//                       <i class="material-icons ">edit</i>
-//                     </button>
-//                   </td>
-//                   <td>
-//                     <button onClick={(e)=>this.delete(user.id)} class="btn waves-effect waves-light right" type="submit" name="action">
-//                       <i class="material-icons ">delete</i>
-//                     </button>
-//                   </td>
-//                 </tr>
-//               )
-//           }
-//         </tbody>
-//       </table>
-//         </div>
-//         </div>
-        
-//       </div>
-//     );
-//   }
+// function App(){
+//   return(
+//     <>
+//     <BrowserRouter>
+//     <Routes>
+//       <Route exact path="/" element ={<Home/>}/>
+//       {/* <Route path="/userList" element={<UserList/>}/>
+//       <Route path="/addUser" element={<AddUser/>}/>
+//       <Route path="/editUser/:id" element={<UpdateUser/>}/> */}
+//       <Route exact path="/chat" element={<Chat/>}/>
+//     </Routes>
+//     </BrowserRouter>
+//     </>
+//   )
 // }
 
 // export default App;
