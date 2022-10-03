@@ -22,6 +22,8 @@
     color: #069;
     text-decoration: underline;
     cursor: pointer;
+    margin-left: 10px;
+    
   }
   .chat{
     width: 600px;

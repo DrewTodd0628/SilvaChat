@@ -98,6 +98,7 @@ const Chat = () => {
                             {i[1]}
                         </div>
                         <div>
+                            
                             <button type="button" 
                             className="button"
                             onClick={()=>handleRemove(i[3],i[2])}
