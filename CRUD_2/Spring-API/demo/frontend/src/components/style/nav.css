@@ -1,0 +1,11 @@
+.logo {
+    position: absolute;
+    left: 0px;
+    margin: 0px;
+}
+
+.authBtn {
+    position: absolute;
+    right: 0px;
+    margin: 13px;
+}
