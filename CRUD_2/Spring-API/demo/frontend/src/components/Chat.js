@@ -6,7 +6,24 @@ import './style/chatStyle.css';
 const Chat = () => {
 
     const[data, setData] = React.useState(null);
+
+    //user_name, message, id, edit string
+    // const [item, setItem] = useState({
+    //     user_name : "",
+    //     message_text : "",
+    //     message_id : "",
+    //     user_id : "",
+    //     message_edit : "",
+    // });
+
+
+    //const value: string | null
+    //const [value, setValue]=useState<string | null>(null);
+    const[value, setValue]=useState(null);
+    const [editingValue,setEditingValue] = useState(value);
+
     const[messageData,setMessageData]= React.useState([]);
+    const[emptyList, setEmptyList] = React.useState([]);
     const[displayList, setDisplayList] = React.useState([]);
     const [user , setUser] = useState({
         id: "",
@@ -64,18 +81,29 @@ const Chat = () => {
         UserService.getData().then(response=>{
 
             const text = response.data;
+           
+            //zero out display list to empty array
+            setDisplayList([]);
+ 
             //give the text props as it response.data doesn't have column headers
             for(let i=0; i<text.length; i++){
-                //user_name, message, id
-                text[i][0]=""+text[i][0];
-                text[i][1]=""+text[i][1];
-                text[i][2]=""+text[i][2];
-                text[i][3]=""+text[i][3];
+                 
+                 const item = {
+                    user_name : ""+text[i][0],
+                    message_text : ""+text[i][1],
+                    message_id : ""+text[i][2],
+                    user_id : ""+text[i][3],
+                    message_edit : "",
+                };
+
+                displayList.push({item});
+
+               // console.log(i + " now the list " + displayList);
             }
 
-            setDisplayList([...text]);
             setMessageData(displayList);
             console.log(messageData);
+
         })
     },[messageData]);
     const handleRemove=(id,user_id)=>{
@@ -85,23 +113,58 @@ const Chat = () => {
         })
     }
 
-    let renderMessage = (i) =>{
-        const messageFromMe = i[3]=== user.id;
+    let RenderMessage = (i) =>{
+        const messageFromMe = i.item.user_id === user.id;
         const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
+        
+
+        //if value is not initialize it initialize
+        // if( value === null){
+        //     console.log("value is...");
+        //     setValue(i.message_text);
+        //     console.log( i.message_text);
+        // }
+                
+        // const onChange = (event) => setValue(event.target.value);
+
+        // const onKeyDown = (event) =>{
+        //     if(event.key === "Enter" || event.key ==="Escape"){
+        //         event.target.blur();
+        //     }
+        // }
+
+        // const onBlur = (event) => {
+        //     if (event.target.value.trim() === ""){
+        //         setEditingValue(value);
+        //     }else{
+        //         setValue(event.target.value);
+        //         console.log("Message value is now : " + value);
+        //     }
+        // }
+
         return(
-            <li key={i[2]} className={className}>
+            <li key={i.message_id} className={className}>
                     <span className = "Message-content">
                         <div className="username">
-                            {i[0]}
+                            {i.item.user_name}
                         </div>
                         <div className="text">
-                            {i[1]}
+                            {i.item.message_text}
                         </div>
+                        {/* <input
+                            type="text"
+                            className="text"
+                            aria-label="message"
+                            value={value}
+                            onChange={onChange}
+                            onKeyDown={onKeyDown}
+                            onBlur={onBlur}
+                        >
+                        </input> */}
                         <div>
-                            
                             <button type="button" 
                             className="button"
-                            onClick={()=>handleRemove(i[3],i[2])}
+                            onClick={()=>handleRemove(i.item.user_id,i.item.message_id)}
                             >
                                 Delete
                             </button>
@@ -117,7 +180,7 @@ const Chat = () => {
             <h1> Chat  </h1>
             <div className = "chat">
                 <div className ="messages-list">
-                    {messageData.map((i)=> renderMessage(i))}
+                    {messageData.map((i)=> RenderMessage(i))}
                 </div>        
                 <div className="enter-message">
                     <input 
