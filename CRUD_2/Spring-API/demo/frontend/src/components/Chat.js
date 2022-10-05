@@ -7,16 +7,6 @@ const Chat = () => {
 
     const[data, setData] = React.useState(null);
 
-    //user_name, message, id, edit string
-    // const [item, setItem] = useState({
-    //     user_name : "",
-    //     message_text : "",
-    //     message_id : "",
-    //     user_id : "",
-    //     message_edit : "",
-    // });
-
-
     //const value: string | null
     //const [value, setValue]=useState<string | null>(null);
     const[value, setValue]=useState(null);
@@ -93,7 +83,7 @@ const Chat = () => {
                     message_text : ""+text[i][1],
                     message_id : ""+text[i][2],
                     user_id : ""+text[i][3],
-                    message_edit : "",
+                    message_edit : ""+text[i][1],
                 };
 
                 displayList.push({item});
@@ -117,30 +107,26 @@ const Chat = () => {
         const messageFromMe = i.item.user_id === user.id;
         const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
         
+        //var displayText = i.item.message_edit;   
+        var displayText = i.item.message_edit;     
+        const onChange = (event) =>{
+            var displayText= event.target.value;
+        } //setDisplayText(event.target.value);
+        const onKeyDown = (event) =>{
+            if(event.key === "Enter" || event.key ==="Escape"){
+                event.target.blur();
+            }
+        }
 
-        //if value is not initialize it initialize
-        // if( value === null){
-        //     console.log("value is...");
-        //     setValue(i.message_text);
-        //     console.log( i.message_text);
-        // }
-                
-        // const onChange = (event) => setValue(event.target.value);
-
-        // const onKeyDown = (event) =>{
-        //     if(event.key === "Enter" || event.key ==="Escape"){
-        //         event.target.blur();
-        //     }
-        // }
-
-        // const onBlur = (event) => {
-        //     if (event.target.value.trim() === ""){
-        //         setEditingValue(value);
-        //     }else{
-        //         setValue(event.target.value);
-        //         console.log("Message value is now : " + value);
-        //     }
-        // }
+        const onBlur = (event) => {
+            if (event.target.value.trim() === ""){
+                setEditingValue(value);
+            }else{
+                //setValue(event.target.value);
+                i.item.message_edit = event.target.value;
+                console.log("Message value is now : " + i.item.message_edit);
+            }
+        }
 
         return(
             <li key={i.message_id} className={className}>
@@ -148,19 +134,20 @@ const Chat = () => {
                         <div className="username">
                             {i.item.user_name}
                         </div>
-                        <div className="text">
+                        {/* <div className="text">
                             {i.item.message_text}
-                        </div>
-                        {/* <input
+                        </div> */}
+                        <input
+                            
                             type="text"
                             className="text"
                             aria-label="message"
-                            value={value}
+                            value={displayText}
                             onChange={onChange}
                             onKeyDown={onKeyDown}
                             onBlur={onBlur}
                         >
-                        </input> */}
+                        </input>
                         <div>
                             <button type="button" 
                             className="button"
