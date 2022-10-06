@@ -1,8 +1,10 @@
 import React, { useEffect, useState} from "react";
-import {NavigationType, useNavigate} from "react-router-dom";
+import {NavigationType, useHistory} from "react-router-dom";
 import UserService from "../services/UserService";
 
 const Home = () =>{
+
+
     const [user , setUser] = useState({
         id: "",
         name: "",
@@ -11,7 +13,7 @@ const Home = () =>{
 
     const[data, setData] = React.useState(null);
    
-    const navigate = useNavigate();
+    const history = useHistory();
 
     const handleChange = (e) => {
         const value = e.target.value;
@@ -34,7 +36,7 @@ const Home = () =>{
               //sessionStorage.setItem("user", data);
             
             //console.log(response);
-            navigate("/chat");
+            history.push("/chat");
         })
         .catch((error) =>{
             console.log(error);
