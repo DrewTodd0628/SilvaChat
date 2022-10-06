@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <main>
         <h2>Welcome to SilvaChat</h2>
-        <p>The one chat app to rule them all!</p>
+        <p>One chat app to rule them all!</p>
         {isAuthenticated ? <button className="homeBtn btn btn-primary btn-block" onClick={history.push("/register")}>Continue to chat</button> : <SignupButton/>};
         
     </main>
