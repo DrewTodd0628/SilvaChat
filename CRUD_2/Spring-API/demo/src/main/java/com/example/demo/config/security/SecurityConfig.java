@@ -33,22 +33,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final ApplicationProperties applicationProps;
 
-  // Set what endpoints to secure
-  @Override
-  public void configure(final WebSecurity web) throws Exception {
-    final var exclusionRegex = "^(?!%s|%s).*$".formatted(
-      "/api/v1/SECUREURL",
-      "/api/v1/ANOTHERSECUREURL"
-    );
+  // @Override
+  // public void configure(final WebSecurity web) throws Exception {
+  //   final var exclusionRegex = "^(?!%s|%s).*$".formatted(
+  //     "/api/v1/user/messages",
+  //     "/api/v1/ANOTHERSECUREURL"
+  //   );
 
-    web.ignoring()
-      .regexMatchers(exclusionRegex);
-  }
+  //   web.ignoring()
+  //     .regexMatchers(exclusionRegex);
+  // }
 
+
+  // Secured endpoints
   @Override
   protected void configure(final HttpSecurity http) throws Exception {
     http.authorizeRequests()
-      .antMatchers("/api/v1/SECUREURL", "/api/v1/ANOTHERSECUREURL")
+      .antMatchers("/api/v1/user/{userId}/message/{messageId}", "/api/v1/user/{userId}/message", "/api/v1/user/messages", "/api/v1/user/{user_id}/message/{id}", "/api/v1/user/{id}", "/api/v1/user", "/api/v1/usermessages", "/api/v1/user/{name}")
         .authenticated()
       .anyRequest()
         .permitAll()
