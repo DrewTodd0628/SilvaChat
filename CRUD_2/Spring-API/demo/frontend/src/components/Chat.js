@@ -88,7 +88,7 @@ const Chat = () => {
                 //zero out display list to empty array
                 setDisplayList([]);
  
-                //give the text props as it response.data doesn't have column headers
+                //Change array of data to array of objects
                 for(var i=0; i<text.length; i++){
                     var key,data;
                     var item = {}

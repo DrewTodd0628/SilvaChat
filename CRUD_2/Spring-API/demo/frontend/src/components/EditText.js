@@ -14,21 +14,13 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
     }
     const messageFromMe = i.user_id === user.id;
     const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
-   // console.log("outside of the parameter "+i.item.message_edit);
-  // const handleMessage = (e)=>
-    //const {value} = e.target;
-    //setMessage({...message,[e.target.name]:value})
-    //console.log(message.message);
+
 
     const handleChange = (event, message_id) =>{
         setGetAll(false);
         const {value}= event.target;
         updateEdit(message_id, value);
-        //messageData[index].message_edit = value;
-        //console.log("............. " + messageData[index].message_edit);
-        /////////const {value}= event.target;
-      //  setMessageData[index]({...messageData,[event.target.name]:value});
-        // console.log("set get all = false");
+        
     } 
     //based on message_id and value
     const updateEdit = (message_id, message_edit) => {
@@ -44,6 +36,32 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
             })
         );
     };
+
+    const onKeyDown = (event) => {
+        if (event.key === "Enter" || event.key === "Escape"){
+            event.target.blur();
+        }
+    }
+
+    const onBlur = (message_id, message_edit, user_id) => {
+        
+        const message = {
+            id: message_id, 
+            message: message_edit,
+            user_id: user_id 
+        };
+        console.log("Messsage = " +message.id  + " " + message.message + " " + message.user_id);
+        MessageService.saveMessage(user_id, message).then((response) => {
+            //set response from database to data
+            //setData(response.data);
+            console.log("New message");
+            console.log(response.data);
+            setGetAll(true);
+        })
+        .catch((error) =>{
+            console.log(error);
+        });
+    }
 
     return(
         <li key={index} className={className}>
@@ -62,6 +80,9 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                         aria-label="message"
                         value={i.message_edit}
                         onChange={(e) => handleChange(e, i.message_id)}
+                        onKeyDown={onKeyDown}
+                        //userId, message
+                        onBlur={() => onBlur(i.message_id, i.message_edit, i.user_id)}
                     >
                     </input>
                     <div>
