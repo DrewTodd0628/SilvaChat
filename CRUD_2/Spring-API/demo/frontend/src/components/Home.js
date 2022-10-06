@@ -3,6 +3,8 @@ import {NavigationType, useHistory} from "react-router-dom";
 import UserService from "../services/UserService";
 
 const Home = () =>{
+
+
     const [user , setUser] = useState({
         id: "",
         name: "",

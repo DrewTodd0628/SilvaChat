@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -10,8 +10,21 @@ import Chat from "./components/Chat";
 import NavBar from './components/nav-bar';
 import user from './components/user';
 import ProtectedRoute from './auth/protected-route';
+import ExternalApi from './views/external-api';
+import axios from 'axios';
+import { addAccessTokenInterceptor } from "./auth/httpClient";
 
 function App(){
+ 
+  const { getAccessTokenSilently } = useAuth0();
+
+  useEffect(() => {
+    addAccessTokenInterceptor(getAccessTokenSilently);
+    console.log("Ran getToken");
+  }, [getAccessTokenSilently]);
+
+
+
 
   const { isLoading } = useAuth0();
 
@@ -29,6 +42,7 @@ function App(){
         <Route path="/editUser/:id" element={<UpdateUser/>}/> */}
         <ProtectedRoute exact path="/chat" component={Chat}/>
         <ProtectedRoute exact path="/user" component={user}/>
+        <ProtectedRoute exact path="/external-api" component={ExternalApi}/>
     </Switch>
     </>
   )
