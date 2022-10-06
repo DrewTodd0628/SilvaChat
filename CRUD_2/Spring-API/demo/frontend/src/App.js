@@ -13,6 +13,7 @@ import ProtectedRoute from './auth/protected-route';
 import ExternalApi from './views/external-api';
 import axios from 'axios';
 import { addAccessTokenInterceptor } from "./auth/httpClient";
+import Register from './components/Register';
 
 function App(){
  
@@ -42,7 +43,8 @@ function App(){
         <Route path="/editUser/:id" element={<UpdateUser/>}/> */}
         <ProtectedRoute exact path="/chat" component={Chat}/>
         <ProtectedRoute exact path="/user" component={user}/>
-        <ProtectedRoute exact path="/external-api" component={ExternalApi}/>
+        <Route exact path="/external-api" component={ExternalApi}/>
+        <ProtectedRoute exact path="/register" component={Register}/>
     </Switch>
     </>
   )
