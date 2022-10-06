@@ -20,13 +20,31 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
     //setMessage({...message,[e.target.name]:value})
     //console.log(message.message);
 
-    const handleChange = (event, index) =>{
+    const handleChange = (event, message_id) =>{
         setGetAll(false);
         const {value}= event.target;
+        updateEdit(message_id, value);
+        //messageData[index].message_edit = value;
+        //console.log("............. " + messageData[index].message_edit);
+        /////////const {value}= event.target;
       //  setMessageData[index]({...messageData,[event.target.name]:value});
         // console.log("set get all = false");
     } 
-   
+    //based on message_id and value
+    const updateEdit = (message_id, message_edit) => {
+        console.log("messsage_id = " +message_id);
+        console.log("message_edit = " + message_edit);
+        setMessageData(
+            messageData.map((item) => {
+                if (item.message_id === message_id){
+                    return { ...item, message_edit};
+                } else {
+                    return item;
+                }
+            })
+        );
+    };
+
     return(
         <li key={index} className={className}>
                 <span className = "Message-content">
@@ -43,7 +61,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                         name="message_edit"
                         aria-label="message"
                         value={i.message_edit}
-                        onChange={(e,index) => handleChange(e,index)}
+                        onChange={(e) => handleChange(e, i.message_id)}
                     >
                     </input>
                     <div>
