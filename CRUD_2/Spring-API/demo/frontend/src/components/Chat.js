@@ -1,17 +1,14 @@
 import React, { useEffect, useState} from "react";
 //import {NavigationType, useNavigate} from "react-router-dom";
+import EditText from "./EditText";
 import UserService from "../services/UserService";
 import MessageService from "../services/MessageService";
+
 import './style/chatStyle.css';
 const Chat = () => {
 
+    const[getAll,setGetAll] = useState(true);
     const[data, setData] = React.useState(null);
-
-    //const value: string | null
-    //const [value, setValue]=useState<string | null>(null);
-    const[value, setValue]=useState(null);
-    const [editingValue,setEditingValue] = useState(value);
-
     const[messageData,setMessageData]= React.useState([]);
     const[emptyList, setEmptyList] = React.useState([]);
     const[displayList, setDisplayList] = React.useState([]);
@@ -20,6 +17,12 @@ const Chat = () => {
         name: "",
         timestamp: "",
     });
+    const toggleIsGetAll = () =>{
+        //passed function to setState
+       // console.log("toggleIsGetAll = " + getAll);
+        setGetAll(current => current);
+       // console.log("toggleIsGetAll = "  + getAll);
+    }
     const [message, setMessage] = useState({
         id: "",
         message: "",
@@ -67,107 +70,79 @@ const Chat = () => {
         })
 
     };
+    useEffect(() =>{
+        console.log("Get all " + getAll);
+    },[getAll]);
      useEffect(() =>{
-        UserService.getData().then(response=>{
 
-            const text = response.data;
+        //get current value of getAll 
+         toggleIsGetAll();
+         
+        // //if getAll = true, then get all messages
+         if(getAll){
+            
+            UserService.getData().then(response=>{
+
+                const text = response.data;
            
-            //zero out display list to empty array
-            setDisplayList([]);
+                //zero out display list to empty array
+                setDisplayList([]);
  
-            //give the text props as it response.data doesn't have column headers
-            for(let i=0; i<text.length; i++){
-                 
-                 const item = {
-                    user_name : ""+text[i][0],
-                    message_text : ""+text[i][1],
-                    message_id : ""+text[i][2],
-                    user_id : ""+text[i][3],
-                    message_edit : ""+text[i][1],
-                };
+                //give the text props as it response.data doesn't have column headers
+                for(var i=0; i<text.length; i++){
+                    var key,data;
+                    var item = {}
+                    for(var j=0; j<text[i].length;j++ ){
+                        //key = text[i][j][0];
+                        if(j==0){
 
-                displayList.push({item});
+                            key = "user_name"
+                            data =text[i][j];
+                            item[key] = data;
+                        }
+                        if(j==1){
 
-               // console.log(i + " now the list " + displayList);
-            }
+                            key = "message_text";
+                            data = text[i][j];
+                            item[key] = data;
+                        }
+                        if(j==2){
 
-            setMessageData(displayList);
-            console.log(messageData);
+                            key = "message_id";
+                            data = text[i][j];
+                            item[key] = data;
+                        }
+                        if(j==3){
 
-        })
+                            key = "user_id";
+                            data = text[i][j];
+                            item[key] = data;
+
+                            //add edit message
+                            key = "message_edit";
+                            data = text[i][1];
+                            item[key] = data;
+                        }
+                    }
+                    displayList.push(item);
+
+                // console.log(i + " now the list " + displayList);
+                }
+
+                setMessageData(displayList);
+                console.log(" index 0 : " + messageData[0].user_name + " " + messageData[0].message_text + " " + messageData[0].message_id + " " + messageData[0].user_id);
+                console.log(messageData);
+
+            })
+        }
     },[messageData]);
-    const handleRemove=(id,user_id)=>{
-        MessageService.deleteMessage(id, user_id).then(response =>{
-            console.log("we've deleted this");
-            console.log(response.data);
-        })
-    }
-
-    let RenderMessage = (i) =>{
-        const messageFromMe = i.item.user_id === user.id;
-        const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
-        
-        //var displayText = i.item.message_edit;   
-        var displayText = i.item.message_edit;     
-        const onChange = (event) =>{
-            var displayText= event.target.value;
-        } //setDisplayText(event.target.value);
-        const onKeyDown = (event) =>{
-            if(event.key === "Enter" || event.key ==="Escape"){
-                event.target.blur();
-            }
-        }
-
-        const onBlur = (event) => {
-            if (event.target.value.trim() === ""){
-                setEditingValue(value);
-            }else{
-                //setValue(event.target.value);
-                i.item.message_edit = event.target.value;
-                console.log("Message value is now : " + i.item.message_edit);
-            }
-        }
-
-        return(
-            <li key={i.message_id} className={className}>
-                    <span className = "Message-content">
-                        <div className="username">
-                            {i.item.user_name}
-                        </div>
-                        {/* <div className="text">
-                            {i.item.message_text}
-                        </div> */}
-                        <input
-                            
-                            type="text"
-                            className="text"
-                            aria-label="message"
-                            value={displayText}
-                            onChange={onChange}
-                            onKeyDown={onKeyDown}
-                            onBlur={onBlur}
-                        >
-                        </input>
-                        <div>
-                            <button type="button" 
-                            className="button"
-                            onClick={()=>handleRemove(i.item.user_id,i.item.message_id)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </span>
-                    <br/>
-            </li>
-        )      
-    }
 
     return (
         <div>
             <h1> Chat  </h1>
             <div className = "chat">
                 <div className ="messages-list">
-                    {messageData.map((i)=> RenderMessage(i))}
+                    {messageData.map((i,index)=> EditText(i, index, user, setGetAll, messageData,setMessageData))}
                 </div>        
                 <div className="enter-message">
                     <input 
