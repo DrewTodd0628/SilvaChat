@@ -4,8 +4,24 @@
     margin: 0px;
 }
 
-.authBtn {
+.navBtn {
+    background-color: rgb(189, 189, 189);
+}
+
+.navButtons {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.navBtn, .authBtn {
+    margin-top: 14px;
+    margin-right: 14px;
+}
+
+.container {
+    width: 100%;
     position: absolute;
     right: 0px;
-    margin: 13px;
+    max-width: none;
 }
