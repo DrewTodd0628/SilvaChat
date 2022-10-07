@@ -54,6 +54,7 @@ public class MessageController {
     @PostMapping("/user/{userId}/message")
     public Message createMessage(@PathVariable(value="userId") int userId,
                                  @Valid @RequestBody Message message) throws Exception {
+        System.out.println("here we are");
         return userRepo.findById(userId).map(user ->{
             message.setUser(user);
             return messageRepo.save(message);

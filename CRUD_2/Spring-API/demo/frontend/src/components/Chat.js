@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useRef} from "react";
 //import {NavigationType, useNavigate} from "react-router-dom";
 import EditText from "./EditText";
 import UserService from "../services/UserService";
@@ -17,12 +17,15 @@ const Chat = () => {
         name: "",
         timestamp: "",
     });
+    const isFirstRender = useRef(true);
     const toggleIsGetAll = () =>{
         //passed function to setState
        // console.log("toggleIsGetAll = " + getAll);
+       
+
         setGetAll(current => current);
        // console.log("toggleIsGetAll = "  + getAll);
-    }
+    };
     const [message, setMessage] = useState({
         id: "",
         message: "",
@@ -41,19 +44,22 @@ const Chat = () => {
     useEffect( () => {
         var object =sessionStorage.getItem("user");
         setData(object);
+        console.log(data);
         changeUserToValue();
     }, []);
 
     const changeUserToValue = ()=>{
         const object =sessionStorage.getItem("user");
-        const array = object.split(",");
 
+        const array = object.split(",");
         const a0 = array[0].split(":");
         const a1 = array[1].split("\"");
         const a2 = array[2].split("\"");
+       
+        const num = Number(a0[1]);
+        setUser({id:num, name:a1[3],timestamp:a2[3] });
+        setMessage({user_id:num });
         
-        setUser({id:a0[1], name:a1[3],timestamp:a2[3] });
-        setMessage({user_id:a0[1]});
     }
     const handleMessage = (e)=>{
         const {value} = e.target;
@@ -61,17 +67,24 @@ const Chat = () => {
         console.log(message.message);
     }
     const sendMessage = (e)=>{
-        // e.preventDefault();
+       // e.preventDefault();
         console.log(message);
-        MessageService.saveMessage(user.id,message).then(response => {
+        MessageService.saveMessage(message.user_id,message).then(response => {
             setMsg({id:response.data.id,name:user.name,user_id: message.user_id,message: response.data.message});
             console.log("response.data");
             console.log(response.data);
             
         })
+        .catch((error)=>{
+            console.log(error.response.data);
+        });
 
     };
     useEffect(() =>{
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return // return early if first render
+        }
         console.log("Get all " + getAll);
     },[getAll]);
      useEffect(() =>{

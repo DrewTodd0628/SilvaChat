@@ -11,6 +11,9 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
             console.log("we've deleted this");
             console.log(response.data);
         })
+        .catch((error)=>{
+            console.log(error.response.data);
+        });
     }
     const messageFromMe = i.user_id === user.id;
     const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
@@ -108,18 +111,6 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                             </div>
                         )}
                     </div>
-                    {/* <input
-                        
-                        type="text"
-                        className="display"
-                        name="message_edit"
-                        aria-label="message"
-                        value={i.message_edit}
-                        onChange={(e) => handleChange(e, i.message_id)}
-                        onKeyDown={onKeyDown}
-                        onBlur={() => onBlur(i.message_id, i.message_edit, i.user_id, i.message_text)}
-                    >
-                    </input> */}
                     <div>
                         <button type="button" 
                         className="button"
