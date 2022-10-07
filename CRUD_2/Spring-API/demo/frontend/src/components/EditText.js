@@ -75,8 +75,8 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
         <li key={index} className={className}>
                 <span className = "Message-content">
                     <div className="username">
-                        {/* {i.user_name}  */}
-                        Current user={i.current_user.toString()}
+                        {i.user_name} 
+                        
                     </div>
                     {/* <div className="text">
                         {i.item.message_text}

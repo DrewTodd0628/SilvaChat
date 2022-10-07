@@ -61,7 +61,7 @@ const Chat = () => {
         console.log(message.message);
     }
     const sendMessage = (e)=>{
-        e.preventDefault();
+        // e.preventDefault();
         console.log(message);
         MessageService.saveMessage(user.id,message).then(response => {
             setMsg({id:response.data.id,name:user.name,user_id: message.user_id,message: response.data.message});
