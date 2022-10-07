@@ -53,7 +53,7 @@ const Register = () =>{
 
     //everytime data is change sessionStorage will be set to data
     useEffect(()=>{
-      sessionStorage.setItem("currentUser",JSON.stringify(data));
+      sessionStorage.setItem("user",JSON.stringify(data));
     },[data]);
     const saveUser = (e) => {
         e.preventDefault();
