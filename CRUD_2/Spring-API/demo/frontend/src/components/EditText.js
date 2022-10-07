@@ -43,48 +43,83 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
         }
     }
 
-    const onBlur = (message_id, message_edit, user_id) => {
+    const onBlur = (message_id, message_edit, user_id, message_text) => {
         
-        const message = {
-            id: message_id, 
-            message: message_edit,
-            user_id: user_id 
-        };
-        console.log("Messsage = " +message.id  + " " + message.message + " " + message.user_id);
-        MessageService.saveMessage(user_id, message).then((response) => {
-            //set response from database to data
-            //setData(response.data);
-            console.log("New message");
-            console.log(response.data);
+        //Don't save an empty string
+        if(message_edit.trim()=== ""){
+            //Reset message_id and message_edit to original message
+            console.log("Message text " + i.message_text);
+            updateEdit(message_id, message_text);
             setGetAll(true);
-        })
-        .catch((error) =>{
-            console.log(error);
-        });
+        }else{
+            const message = {
+                id: message_id, 
+                message: message_edit,
+                user_id: user_id 
+            };
+            console.log("Messsage = " +message.id  + " " + message.message + " " + message.user_id);
+            MessageService.saveMessage(user_id, message).then((response) => {
+                //set response from database to data
+                //setData(response.data);
+                console.log("New message");
+                console.log(response.data);
+                setGetAll(true);
+            })
+            .catch((error) =>{
+                console.log(error);
+            });
+        }
     }
 
     return(
         <li key={index} className={className}>
                 <span className = "Message-content">
                     <div className="username">
-                        {i.user_name}
+                        {/* {i.user_name}  */}
+                        Current user={i.current_user.toString()}
                     </div>
                     {/* <div className="text">
                         {i.item.message_text}
                     </div> */}
-                    <input
+                    <div className = "Message-content">
+                        {i.current_user ? (
+                            /*yes it is editable*/
+                            <input
+                            type="text"
+                            className="display"
+                            name="message_edit"
+                            aria-label="message"
+                            value={i.message_edit}
+                            onChange={(e) => handleChange(e, i.message_id)}
+                            onKeyDown={onKeyDown}
+                            onBlur={() => onBlur(i.message_id, i.message_edit, i.user_id, i.message_text)}
+                            >   
+                            </input>
+                        ):(
+                            /*No this is not editable */
+                            <div
+                            type="text"
+                            className="text"
+                            name="message_text"
+                            aria-label="message"
+                            value={i.message}
+                            >
+                                {i.message_text}
+                            </div>
+                        )}
+                    </div>
+                    {/* <input
                         
                         type="text"
-                        className="text"
+                        className="display"
                         name="message_edit"
                         aria-label="message"
                         value={i.message_edit}
                         onChange={(e) => handleChange(e, i.message_id)}
                         onKeyDown={onKeyDown}
-                        //userId, message
-                        onBlur={() => onBlur(i.message_id, i.message_edit, i.user_id)}
+                        onBlur={() => onBlur(i.message_id, i.message_edit, i.user_id, i.message_text)}
                     >
-                    </input>
+                    </input> */}
                     <div>
                         <button type="button" 
                         className="button"

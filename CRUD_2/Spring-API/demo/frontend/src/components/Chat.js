@@ -62,6 +62,7 @@ const Chat = () => {
     }
     const sendMessage = (e)=>{
         e.preventDefault();
+        console.log(message);
         MessageService.saveMessage(user.id,message).then(response => {
             setMsg({id:response.data.id,name:user.name,user_id: message.user_id,message: response.data.message});
             console.log("response.data");
@@ -122,6 +123,15 @@ const Chat = () => {
                             key = "message_edit";
                             data = text[i][1];
                             item[key] = data;
+
+                            key = "current_user";
+                            //if message is from current user set editable to true
+                            if(user.id = text[i][j] && user.name === text[i][0] ){
+                                data = true;
+                            }else{
+                                data = false;
+                            }
+                            item[key] = data;
                         }
                     }
                     displayList.push(item);
@@ -130,8 +140,8 @@ const Chat = () => {
                 }
 
                 setMessageData(displayList);
-                console.log(" index 0 : " + messageData[0].user_name + " " + messageData[0].message_text + " " + messageData[0].message_id + " " + messageData[0].user_id);
-                console.log(messageData);
+               // console.log(" index 0 : " + messageData[0].user_name + " " + messageData[0].message_text + " " + messageData[0].message_id + " " + messageData[0].user_id);
+               // console.log(messageData);
 
             })
         }
@@ -139,7 +149,9 @@ const Chat = () => {
 
     return (
         <div>
-            <h1> Chat  </h1>
+         <h1 
+            className="title"
+        >Public Chat</h1>
             <div className = "chat">
                 <div className ="messages-list">
                     {messageData.map((i,index)=> EditText(i, index, user, setGetAll, messageData,setMessageData))}
