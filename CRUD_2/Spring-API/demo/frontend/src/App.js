@@ -14,6 +14,7 @@ import ExternalApi from './views/external-api';
 import axios from 'axios';
 import { addAccessTokenInterceptor } from "./auth/httpClient";
 import Register from './components/Register';
+import AdminPanel from './components/AdminPanel';
 
 function App(){
  
@@ -45,6 +46,7 @@ function App(){
         <ProtectedRoute exact path="/user" component={user}/>
         <Route exact path="/external-api" component={ExternalApi}/>
         <ProtectedRoute exact path="/register" component={Register}/>
+        <ProtectedRoute exact path="/admin-panel" component={AdminPanel}/>
     </Switch>
     </>
   )
