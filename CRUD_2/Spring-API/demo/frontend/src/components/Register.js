@@ -10,6 +10,7 @@ const Register = () =>{
   const { user} = useAuth0();
   console.log("Current: " + user.sub);
   const [users, setUsers] = useState([]);
+  const history = useHistory();
 
   // Checks if user is new
   useEffect(() => {
@@ -28,6 +29,8 @@ const Register = () =>{
   }, []);
 
   if (users.find(u => u.timestamp == user.sub)) {
+    sessionStorage.setItem("user",JSON.stringify(users.find(u => u.timestamp == user.sub)));
+    history.push("/chat");
     console.log("Found you");
   } else {
     console.log("Your a new user"); 
@@ -42,8 +45,6 @@ const Register = () =>{
     });
 
     const[data, setData] = React.useState(null);
-   
-    const history = useHistory();
 
     const handleChange = (e) => {
         const value = e.target.value;
