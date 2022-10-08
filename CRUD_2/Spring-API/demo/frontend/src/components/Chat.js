@@ -138,13 +138,19 @@ const Chat = () => {
                             item[key] = data;
 
                             key = "current_user";
-                            //if message is from current user set editable to true
+                            //if message is from current user set "current_user" to true
                             if(user.id = text[i][j] && user.name === text[i][0] ){
                                 data = true;
                             }else{
                                 data = false;
                             }
                             item[key] = data;
+
+                            key= "editable"
+                            //Only editable by current user, atm set to false
+                            data = true;
+                            item[key] = data;
+                            
                         }
                     }
                     displayList.push(item);

@@ -15,7 +15,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
             console.log(error.response.data);
         });
     }
-    const messageFromMe = i.user_id === user.id;
+    const messageFromMe = i.current_user;
     const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
 
 
@@ -78,15 +78,12 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
         <li key={index} className={className}>
                 <span className = "Message-content">
                     <div className="username">
-                        {i.user_name} 
-                        
+                        {i.user_name}
                     </div>
-                    {/* <div className="text">
-                        {i.item.message_text}
-                    </div> */}
-                    <div className = "Message-content">
-                        {i.current_user ? (
-                            /*yes it is editable*/
+                    {i.current_user ? (
+                         /*yes it is editable*/
+                        !i.editable ? (
+                            /*editable = true*/ 
                             <input
                             type="text"
                             className="display"
@@ -99,25 +96,35 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                             >   
                             </input>
                         ):(
-                            /*No this is not editable */
-                            <div
-                            type="text"
-                            className="text"
-                            name="message_text"
-                            aria-label="message"
-                            value={i.message}
-                            >
+                            /*editable = false */
+                            <div type="text" className="text">
                                 {i.message_text}
                             </div>
-                        )}
-                    </div>
-                    <div>
-                        <button type="button" 
-                        className="button"
-                        onClick={()=>handleRemove(i.user_id,i.message_id)}
+                        )
+           
+                    ):(
+                        /*No this is not the current user*/
+                        <div
+                        type="text"
+                        className="text"
+                        name="message_text"
+                        aria-label="message"
+                        value={i.message}
                         >
-                            Delete
-                        </button>
+                            {i.message_text}
+                        </div>
+                    )}
+                    
+                    <div>
+                        {i.current_user === true &&
+                            
+                            <button type="button" 
+                            className="button"
+                            onClick={()=>handleRemove(i.user_id,i.message_id)}
+                            >
+                                Delete
+                            </button>
+                        }
                     </div>
                 </span>
                 <br/>
