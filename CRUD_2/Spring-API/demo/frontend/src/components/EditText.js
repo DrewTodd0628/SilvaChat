@@ -4,16 +4,16 @@ import MessageService from "../services/MessageService";
 import './style/chatStyle.css';
 import Chat from "./Chat";
 
-const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
+const EditText = (i, user, setGetAll, messageData, setMessageData) => {
 
     const handleRemove=(id,user_id)=>{
         MessageService.deleteMessage(id, user_id).then(response =>{
             console.log("we've deleted this");
             console.log(response.data);
-            console.log(messageData);
-            updateDelete(id);
-            console.log("we are deleting ???? let's see if messageData has updated");
-            console.log(messageData);
+            //console.log(messageData);
+            //updateDelete(id);
+            //console.log("we are deleting ???? let's see if messageData has updated");
+            //console.log(messageData);
             
         })
         .catch((error)=>{
@@ -118,7 +118,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
     }
 
     return(
-        <li key={index} className={className}>
+        <li key={i.message_id} className={className}>
                 <span className = "Message-content">
                     <div className="username">
                         {i.user_name}

@@ -7,7 +7,7 @@ import MessageService from "../services/MessageService";
 import './style/chatStyle.css';
 const Chat = () => {
 
-    const[getAll,setGetAll] = React.useState(true);
+    const[getAll,setGetAll] = useState(true);
     const[data, setData] = React.useState(null);
     const[messageData,setMessageData]= React.useState([]);
     const[emptyList, setEmptyList] = React.useState([]);
@@ -20,11 +20,8 @@ const Chat = () => {
     const isFirstRender = useRef(true);
     const toggleIsGetAll = () =>{
         //passed function to setState
-       // console.log("toggleIsGetAll = " + getAll);
-       
-
         setGetAll(current => current);
-       // console.log("toggleIsGetAll = "  + getAll);
+        console.log("toggleIsGetAll = "  + getAll);
     };
     const [message, setMessage] = useState({
         id: "",
@@ -63,11 +60,8 @@ const Chat = () => {
         
     }
     const handleMessage = (e)=>{
-        console.log("handle message : ");
         const {value} = e.target;
         setMessage({...message,[e.target.name]:value})
-        console.log("message.message = " + message.message);
-        console.log("message = " + message);
     }
     const sendMessage = (e)=>{
        // e.preventDefault();
@@ -88,6 +82,7 @@ const Chat = () => {
             isFirstRender.current = false;
             return // return early if first render
         }
+        toggleIsGetAll();
         console.log("Get all " + getAll);
     },[getAll]);
      useEffect(() =>{
@@ -101,7 +96,7 @@ const Chat = () => {
             UserService.getData().then(response=>{
 
                 const text = response.data;
-           
+                //console.log(text);
                 //zero out display list to empty array
                 setDisplayList([]);
  
@@ -176,14 +171,14 @@ const Chat = () => {
         >Public Chat</h1>
             <div className = "chat">
                 <div className ="messages-list">
-                    {messageData.map((i,index)=> EditText(i, index, user, setGetAll, messageData,setMessageData))}
+                    {messageData.map((i)=> EditText(i, user, setGetAll, messageData,setMessageData))}
                 </div>        
                 <div className="enter-message">
                     <input 
                     type = "text" 
                     placeholder="enter message" 
                     name = "message"
-                    value ={message.message} 
+                    value ={message.message || ''} 
                     onChange={(e)=>handleMessage(e)}
                     className="entered-message" 
                     // onKeyPress={event => {
