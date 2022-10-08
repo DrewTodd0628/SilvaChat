@@ -5,11 +5,16 @@ import './style/chatStyle.css';
 import Chat from "./Chat";
 
 const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
-    //console.log("Edit Text : ");
+
     const handleRemove=(id,user_id)=>{
         MessageService.deleteMessage(id, user_id).then(response =>{
             console.log("we've deleted this");
             console.log(response.data);
+            console.log(messageData);
+            updateDelete(id);
+            console.log("we are deleting ???? let's see if messageData has updated");
+            console.log(messageData);
+            
         })
         .catch((error)=>{
             console.log(error.response.data);
@@ -18,17 +23,23 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
     const messageFromMe = i.current_user;
     const className = messageFromMe? "Messages-message currentUser" : "Messages-message";
 
-
     const handleChange = (event, message_id) =>{
+
         setGetAll(false);
         const {value}= event.target;
-        updateEdit(message_id, value);
+        updateMessageEdit(message_id, value);
         
     } 
+    const handleEditable = (message_id) =>{
+
+        setGetAll(false);
+        const value = true;
+        updateEditable(message_id, value);
+        
+    }
     //based on message_id and value
-    const updateEdit = (message_id, message_edit) => {
-        console.log("messsage_id = " +message_id);
-        console.log("message_edit = " + message_edit);
+    const updateMessageEdit = (message_id, message_edit) => {
+        
         setMessageData(
             messageData.map((item) => {
                 if (item.message_id === message_id){
@@ -39,6 +50,34 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
             })
         );
     };
+
+    const updateEditable = (message_id, editable) => {
+
+        setMessageData(
+            messageData.map((item) => {
+                if (item.message_id === message_id){
+                    return { ... item, editable};
+                }else{
+                    return item;
+                }
+            })
+        );
+    };
+
+    const updateDelete = (message_id)=>{
+
+        setMessageData(
+            messageData.map((item) => {
+                if (item.message_id === message_id){
+
+                }else{
+                    return item;
+                }
+            })
+        )
+        console.log("lets check now");
+        console.log(messageData);
+    }
 
     const onKeyDown = (event) => {
         if (event.key === "Enter" || event.key === "Escape"){
@@ -51,8 +90,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
         //Don't save an empty string
         if(message_edit.trim()=== ""){
             //Reset message_id and message_edit to original message
-            console.log("Message text " + i.message_text);
-            updateEdit(message_id, message_text);
+            updateMessageEdit(message_id, message_text);
             setGetAll(true);
         }else{
             const message = {
@@ -60,13 +98,18 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                 message: message_edit,
                 user_id: user_id 
             };
-            console.log("Messsage = " +message.id  + " " + message.message + " " + message.user_id);
+
             MessageService.saveMessage(user_id, message).then((response) => {
                 //set response from database to data
                 //setData(response.data);
                 console.log("New message");
                 console.log(response.data);
+
+                //Now re-allow edits
+                const value = false; 
+                updateEditable(message.id, value);
                 setGetAll(true);
+
             })
             .catch((error) =>{
                 console.log(error);
@@ -82,7 +125,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                     </div>
                     {i.current_user ? (
                          /*yes it is editable*/
-                        !i.editable ? (
+                        i.editable ? (
                             /*editable = true*/ 
                             <input
                             type="text"
@@ -98,7 +141,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                         ):(
                             /*editable = false */
                             <div type="text" className="text">
-                                {i.message_text}
+                                {i.message_edit}
                             </div>
                         )
            
@@ -109,7 +152,7 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                         className="text"
                         name="message_text"
                         aria-label="message"
-                        value={i.message}
+                        value={i.message_text}
                         >
                             {i.message_text}
                         </div>
@@ -117,12 +160,19 @@ const EditText = (i, index, user, setGetAll, messageData, setMessageData) => {
                     
                     <div>
                         {i.current_user === true &&
-                            
                             <button type="button" 
                             className="button"
                             onClick={()=>handleRemove(i.user_id,i.message_id)}
                             >
                                 Delete
+                            </button>
+                        }
+                        { i.editable === false && i.current_user === true &&
+                            <button type ="button"
+                            className="button"
+                            onClick={()=>handleEditable(i.message_id)}
+                            >
+                                Update
                             </button>
                         }
                     </div>

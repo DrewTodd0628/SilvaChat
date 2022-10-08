@@ -7,7 +7,7 @@ import MessageService from "../services/MessageService";
 import './style/chatStyle.css';
 const Chat = () => {
 
-    const[getAll,setGetAll] = useState(true);
+    const[getAll,setGetAll] = React.useState(true);
     const[data, setData] = React.useState(null);
     const[messageData,setMessageData]= React.useState([]);
     const[emptyList, setEmptyList] = React.useState([]);
@@ -42,9 +42,10 @@ const Chat = () => {
         user_id: "",
     });
     useEffect( () => {
-        var object =sessionStorage.getItem("user");
+        const object =sessionStorage.getItem("user");
+        console.log(" what what waht");
+        console.log(object);
         setData(object);
-        console.log(data);
         changeUserToValue();
     }, []);
 
@@ -62,9 +63,11 @@ const Chat = () => {
         
     }
     const handleMessage = (e)=>{
+        console.log("handle message : ");
         const {value} = e.target;
         setMessage({...message,[e.target.name]:value})
-        console.log(message.message);
+        console.log("message.message = " + message.message);
+        console.log("message = " + message);
     }
     const sendMessage = (e)=>{
        // e.preventDefault();
@@ -148,9 +151,9 @@ const Chat = () => {
 
                             key= "editable"
                             //Only editable by current user, atm set to false
-                            data = true;
+                            data = false;
                             item[key] = data;
-                            
+
                         }
                     }
                     displayList.push(item);
@@ -183,11 +186,11 @@ const Chat = () => {
                     value ={message.message} 
                     onChange={(e)=>handleMessage(e)}
                     className="entered-message" 
-                    onKeyPress={event => {
-                        if(event.key === 'Enter'){
-                            sendMessage(message.message);
-                        }
-                    }}
+                    // onKeyPress={event => {
+                    //     if(event.key === 'Enter'){
+                    //         sendMessage(message.message);
+                    //     }
+                    // }}
                     />
                     <button type="button" 
                     className="send-button" 
